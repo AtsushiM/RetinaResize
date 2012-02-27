@@ -99,4 +99,4 @@ function! s:RetinaResize()
         let res = <SID>_RetinaResizeHTML()
     endif
 endfunction
-command! RetinaSize call s:RetinaResize()
+command! RetinaResize call s:RetinaResize()
