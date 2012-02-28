@@ -3,6 +3,10 @@
 "VERSION:  0.9
 "LICENSE:  MIT
 
+if !exists("g:RetinaResize_Comment")
+    let g:RetinaResize_Comment = 0
+endif
+
 function! s:_checkDigit(num)
     let line = matchlist(string(a:num), '\v(.*)\.(.*)')
 
@@ -37,11 +41,18 @@ function! s:_RetinaResizeCSS()
 
         if value != ret
             let reg_save = @@
+
+            if g:RetinaResize_Comment == 1
+                silent normal ^i/* 
+                silent normal $a */
+                silent normal o
+            else
+                silent normal dd
+                silent normal O
+            endif
+
             let @@ = line[1].line[2].ret.line[4]
 
-            silent normal ^i/* 
-            silent normal $a */
-            silent normal o
             silent normal p
 
             let @@ = reg_save
@@ -75,11 +86,17 @@ function! s:_RetinaResizeHTML()
 
         if value != ret
             let reg_save = @@
-            let @@ = line[1].ret.line[3]
 
-            silent normal ^i<!-- 
-            silent normal $a -->
-            silent normal o
+            if g:RetinaResize_Comment == 1
+                silent normal ^i<!-- 
+                silent normal $a -->
+                silent normal o
+            else
+                silent normal dd
+                silent normal O
+            endif
+
+            let @@ = line[1].ret.line[3]
             silent normal p
 
             let @@ = reg_save
