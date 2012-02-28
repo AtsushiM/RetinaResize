@@ -4,7 +4,7 @@
 "LICENSE:  MIT
 
 if !exists("g:RetinaResize_Comment")
-    let g:RetinaResize_Comment = 0
+    let g:RetinaResize_Comment = 1
 endif
 
 function! s:_checkDigit(num)
@@ -65,47 +65,56 @@ function! s:_RetinaResizeCSS()
     endif
 endfunction
 function! s:_RetinaResizeHTML()
-    let line = matchlist(getline('.'), '\v(.{-}\<img )([^\>]*)(\>.*)')
-    if line != []
-        let ret = ''
-        let value = line[2]
-        let end = 0
+    let base = getline('.')
+    let org = base
+    let baseend = 0
+    let baseret = ''
 
-        while end != 1
-            let match = matchlist(value, '\v(.{-})(width|height)(\=")([0-9]*)(.{-}")(.*)')
+    while baseend == 0
+        let line = matchlist(base, '\v(.{-}\<img )([^\>]{-})(\>)(.*)')
+        if line != []
+            let value = line[2]
+            let end = 0
+            let ret = ''
 
-            if match != []
-                let num = <SID>_checkDigit(match[4] / 2.0)
-                let ret = ret.match[1].match[2].match[3].string(num).match[5]
-                let value = match[6]
-            else
-                let ret = ret.value
-                let  end = 1
-            endif
-        endwhile
+            while end != 1
+                let match = matchlist(value, '\v(.{-})(width|height)(\=")([0-9]*)(.{-}")(.*)')
 
-        if value != ret
-            let reg_save = @@
+                if match != []
+                    let num = <SID>_checkDigit(match[4] / 2.0)
+                    let ret = ret.match[1].match[2].match[3].string(num).match[5]
+                    let value = match[6]
+                else
+                    let ret = ret.value
+                    let end = 1
+                endif
+            endwhile
 
-            if g:RetinaResize_Comment == 1
-                silent normal ^i<!-- 
-                silent normal $a -->
-                silent normal o
-            else
-                silent normal dd
-                silent normal O
-            endif
-
-            let @@ = line[1].ret.line[3]
-            silent normal p
-
-            let @@ = reg_save
-            return 1
+            let ret = line[1].ret.line[3]
+            let baseret = baseret.ret
+            let base = line[4]
         else
-            return 0
+            let baseret = baseret.base
+            let baseend = 1
         endif
-    else
-        return 0
+    endwhile
+
+    if org != baseret
+        let reg_save = @@
+
+        if g:RetinaResize_Comment == 1
+            silent normal ^i<!-- 
+            silent normal $a -->
+            silent normal o
+        else
+            silent normal dd
+            silent normal O
+        endif
+
+        let @@ = baseret
+        silent normal p
+
+        let @@ = reg_save
     endif
 endfunction
 function! s:RetinaResize()
