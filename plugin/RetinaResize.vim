@@ -6,15 +6,13 @@
 function! s:_checkDigit(num)
     let line = matchlist(string(a:num), '\v(.*)\.(.*)')
 
-    if line[2] == 0
-        let ret = line[1]
+    if line[2] == '0'
+        let ret = str2nr(line[1])
     else
-        let ret = string(a:num)
+        let ret = str2float(string(a:num))
     endif
 
-    echo ret
-
-    return str2nr(ret)
+    return ret
 endfunction
 
 function! s:_RetinaResizeCSS()
@@ -56,7 +54,7 @@ function! s:_RetinaResizeCSS()
     endif
 endfunction
 function! s:_RetinaResizeHTML()
-    let line = matchlist(getline('.'), '\v(.*\<img )([^\>]*)(\>.*)')
+    let line = matchlist(getline('.'), '\v(.{-}\<img )([^\>]*)(\>.*)')
     if line != []
         let ret = ''
         let value = line[2]
