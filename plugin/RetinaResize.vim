@@ -4,7 +4,7 @@
 "LICENSE:  MIT
 
 if !exists("g:RetinaResize_Comment")
-    let g:RetinaResize_Comment = 1
+    let g:RetinaResize_Comment = 0
 endif
 
 function! s:_checkDigit(num)
@@ -40,22 +40,12 @@ function! s:_RetinaResizeCSS()
         endwhile
 
         if value != ret
-            let reg_save = @@
-
             if g:RetinaResize_Comment == 1
                 silent normal ^i/* 
                 silent normal $a */
                 silent normal o
-            else
-                silent normal dd
-                silent normal O
             endif
-
-            let @@ = line[1].line[2].ret.line[4]
-
-            silent normal p
-
-            let @@ = reg_save
+            call setline('.', line[1].line[2].ret.line[4])
             return 1
         else
             return 0
@@ -100,21 +90,13 @@ function! s:_RetinaResizeHTML()
     endwhile
 
     if org != baseret
-        let reg_save = @@
-
         if g:RetinaResize_Comment == 1
             silent normal ^i<!-- 
             silent normal $a -->
             silent normal o
-        else
-            silent normal dd
-            silent normal O
         endif
 
-        let @@ = baseret
-        silent normal p
-
-        let @@ = reg_save
+        call setline('.', baseret)
     endif
 endfunction
 function! s:RetinaResize()
