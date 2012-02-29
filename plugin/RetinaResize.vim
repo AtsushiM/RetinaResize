@@ -4,7 +4,7 @@
 "LICENSE:  MIT
 
 if !exists("g:RetinaResize_Comment")
-    let g:RetinaResize_Comment = 0
+    let g:RetinaResize_Comment = 1
 endif
 
 function! s:_checkDigit(num)
