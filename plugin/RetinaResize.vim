@@ -27,10 +27,10 @@ function! s:_RetinaResizeCSS()
         let end = 0
 
         while end != 1
-            let match = matchlist(value, '\v([^0-9]*)([0-9]*)(.*)')
+            let match = matchlist(value, '\v([^0-9]*)([0-9]*\.?[0-9]*)(.*)')
 
             if match[2] != ''
-                let num = <SID>_checkDigit(match[2] / 2.0)
+                let num = <SID>_checkDigit(str2float(match[2]) / 2.0000)
                 let ret = ret.match[1].string(num)
                 let value = match[3]
             else
