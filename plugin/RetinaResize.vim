@@ -6,6 +6,9 @@
 if !exists("g:RetinaResize_Comment")
     let g:RetinaResize_Comment = 1
 endif
+if !exists("g:RetinaResize_Division")
+    let g:RetinaResize_Division = 2.0000
+endif
 
 function! s:_checkDigit(num)
     let line = matchlist(string(a:num), '\v(.*)\.(.*)')
@@ -30,7 +33,7 @@ function! s:_RetinaResizeCSS()
             let match = matchlist(value, '\v([^0-9]*)([0-9]*\.?[0-9]*)(.*)')
 
             if match[2] != ''
-                let num = <SID>_checkDigit(str2float(match[2]) / 2.0000)
+                let num = <SID>_checkDigit(str2float(match[2]) / g:RetinaResize_Division)
                 let ret = ret.match[1].string(num)
                 let value = match[3]
             else
@@ -71,7 +74,7 @@ function! s:_RetinaResizeHTML()
                 let match = matchlist(value, '\v(.{-})(width|height)(\=")([0-9]*)(.{-}")(.*)')
 
                 if match != []
-                    let num = <SID>_checkDigit(match[4] / 2.0)
+                    let num = <SID>_checkDigit(str2float(match[4]) / g:RetinaResize_Division)
                     let ret = ret.match[1].match[2].match[3].string(num).match[5]
                     let value = match[6]
                 else
@@ -88,6 +91,8 @@ function! s:_RetinaResizeHTML()
             let baseend = 1
         endif
     endwhile
+
+    echo org
 
     if org != baseret
         if g:RetinaResize_Comment == 1

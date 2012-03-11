@@ -13,3 +13,10 @@ htmlのimgタグ(width,heightのいづれか１つ以上)、
 
 を実行します。
 
+以下の変数を上書きすることによって動作を変更できます
+
+" 元々の行をコメントで残す (1:残す 0:残さない)
+let g:RetinaResize_Comment = 1
+
+" pixel倍率(小数点以下のゼロの個数で小数点以下の表示数を決定)
+let g:RetinaResize_Division = 2.0000
