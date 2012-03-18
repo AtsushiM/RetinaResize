@@ -10,4 +10,4 @@ if !exists("g:RetinaResize_Division")
     let g:RetinaResize_Division = 2.0000
 endif
 
-command! RetinaResize call retinaresize#RetinaResize()
+command! -range RetinaResize <line1>,<line2>call retinaresize#RetinaResize()

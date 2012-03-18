@@ -16,10 +16,10 @@ function! retinaresize#checkDigit(num)
 endfunction
 
 function! retinaresize#RetinaResizeCSS()
-    let line = matchlist(getline('.'), '\v(.*)(: *)(-*[^;]*)(;*)')
+    let line = matchlist(getline('.'), '\v(\s*)(.*)(: *)(-*[^;]*)(;*)')
     if line != []
         let ret = ''
-        let value = line[3]
+        let value = line[4]
         let end = 0
 
         while end != 1
@@ -36,12 +36,11 @@ function! retinaresize#RetinaResizeCSS()
         endwhile
 
         if value != ret
+            let co = ''
             if g:RetinaResize_Comment == 1
-                silent normal ^i/* 
-                silent normal $a */
-                silent normal o
+                let co = ' /*'.line[2].line[3].line[4].line[5].'*/'
             endif
-            call setline('.', line[1].line[2].ret.line[4])
+            call setline('.', line[1].line[2].line[3].ret.line[5].co)
             return 1
         else
             return 0
@@ -57,9 +56,9 @@ function! retinaresize#RetinaResizeHTML()
     let baseret = ''
 
     while baseend == 0
-        let line = matchlist(base, '\v(.{-}\<img )([^\>]{-})(\>)(.*)')
+        let line = matchlist(base, '\v(\s*)(.{-}\<img )([^\>]{-})(\>)(.*)')
         if line != []
-            let value = line[2]
+            let value = line[3]
             let end = 0
             let ret = ''
 
@@ -76,24 +75,16 @@ function! retinaresize#RetinaResizeHTML()
                 endif
             endwhile
 
-            let ret = line[1].ret.line[3]
+            let ret = line[1].line[2].ret.line[4]
             let baseret = baseret.ret
-            let base = line[4]
+            let base = line[5]
         else
             let baseret = baseret.base
             let baseend = 1
         endif
     endwhile
 
-    echo org
-
     if org != baseret
-        if g:RetinaResize_Comment == 1
-            silent normal ^i<!-- 
-            silent normal $a -->
-            silent normal o
-        endif
-
         call setline('.', baseret)
     endif
 endfunction
