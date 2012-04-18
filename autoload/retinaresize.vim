@@ -3,6 +3,9 @@
 "VERSION:  0.9
 "LICENSE:  MIT
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 if !exists("g:RetinaResize_Comment")
     let g:RetinaResize_Comment = 1
 endif
@@ -101,3 +104,5 @@ function! retinaresize#RetinaResize()
         let res = retinaresize#RetinaResizeHTML()
     endif
 endfunction
+
+let &cpo = s:save_cpo
