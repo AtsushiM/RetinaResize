@@ -3,6 +3,13 @@
 "VERSION:  0.9
 "LICENSE:  MIT
 
+if !exists("g:RetinaResize_Comment")
+    let g:RetinaResize_Comment = 1
+endif
+if !exists("g:RetinaResize_Division")
+    let g:RetinaResize_Division = 2.0000
+endif
+
 function! retinaresize#checkDigit(num)
     let line = matchlist(string(a:num), '\v(.*)\.(.*)')
 
